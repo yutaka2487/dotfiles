@@ -3,59 +3,59 @@
 " 文字コード関連
 "
 if &encoding !=# 'utf-8'
-	set encoding=japan
-	set fileencoding=japan
+    set encoding=japan
+    set fileencoding=japan
 endif
 if has('iconv')
-	let s:enc_euc = 'euc-jp'
-	let s:enc_jis = 'iso-2022-jp'
-	" iconvがeucJP-msに対応しているかをチェック
-	if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
-		let s:enc_euc = 'eucjp-ms'
-		let s:enc_jis = 'iso-2022-jp-3'
-	" iconvがJISX0213に対応しているかをチェック
-	elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
-		let s:enc_euc = 'euc-jisx0213'
-		let s:enc_jis = 'iso-2022-jp-3'
-	endif
-	" fileencodingsを構築
-	if &encoding ==# 'utf-8'
-		let s:fileencodings_default = &fileencodings
-		let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
-		let &fileencodings = &fileencodings .','. s:fileencodings_default
-		unlet s:fileencodings_default
-	else
-		let &fileencodings = &fileencodings .','. s:enc_jis
-		set fileencodings+=utf-8,ucs-2le,ucs-2
-		if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
-			set fileencodings+=cp932
-			set fileencodings-=euc-jp
-			set fileencodings-=euc-jisx0213
-			set fileencodings-=eucjp-ms
-			let &encoding = s:enc_euc
-			let &fileencoding = s:enc_euc
-		else
-			let &fileencodings = &fileencodings .','. s:enc_euc
-		endif
-	endif
-	" 定数を処分
-	unlet s:enc_euc
-	unlet s:enc_jis
+    let s:enc_euc = 'euc-jp'
+    let s:enc_jis = 'iso-2022-jp'
+    " iconvがeucJP-msに対応しているかをチェック
+    if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
+        let s:enc_euc = 'eucjp-ms'
+        let s:enc_jis = 'iso-2022-jp-3'
+    " iconvがJISX0213に対応しているかをチェック
+    elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
+        let s:enc_euc = 'euc-jisx0213'
+        let s:enc_jis = 'iso-2022-jp-3'
+    endif
+    " fileencodingsを構築
+    if &encoding ==# 'utf-8'
+        let s:fileencodings_default = &fileencodings
+        let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
+        let &fileencodings = &fileencodings .','. s:fileencodings_default
+        unlet s:fileencodings_default
+    else
+        let &fileencodings = &fileencodings .','. s:enc_jis
+        set fileencodings+=utf-8,ucs-2le,ucs-2
+        if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
+            set fileencodings+=cp932
+            set fileencodings-=euc-jp
+            set fileencodings-=euc-jisx0213
+            set fileencodings-=eucjp-ms
+            let &encoding = s:enc_euc
+            let &fileencoding = s:enc_euc
+        else
+            let &fileencodings = &fileencodings .','. s:enc_euc
+        endif
+    endif
+    " 定数を処分
+    unlet s:enc_euc
+    unlet s:enc_jis
 endif
 " 日本語を含まない場合は fileencoding に encoding を使うようにする
 if has('autocmd')
-	function! AU_ReCheck_FENC()
-		if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
-			let &fileencoding=&encoding
-		endif
-	endfunction
-	autocmd BufReadPost * call AU_ReCheck_FENC()
+    function! AU_ReCheck_FENC()
+        if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
+            let &fileencoding=&encoding
+        endif
+    endfunction
+    autocmd BufReadPost * call AU_ReCheck_FENC()
 endif
 " 改行コードの自動認識
 set fileformats=unix,dos,mac
 " □とか○の文字があってもカーソル位置がずれないようにする
 if exists('&ambiwidth')
-	set ambiwidth=double
+    set ambiwidth=double
 endif
 
 "-----------------------------------------------------------------------------
@@ -65,13 +65,13 @@ endif
 set autoindent
 "バイナリ編集(xxd)モード（vim -b での起動、もしくは *.bin で発動します）
 augroup BinaryXXD
-	autocmd!
-	autocmd BufReadPre  *.bin let &binary =1
-	autocmd BufReadPost * if &binary | silent %!xxd -g 1
-	autocmd BufReadPost * set ft=xxd | endif
-	autocmd BufWritePre * if &binary | %!xxd -r | endif
-	autocmd BufWritePost * if &binary | silent %!xxd -g 1
-	autocmd BufWritePost * set nomod | endif
+    autocmd!
+    autocmd BufReadPre  *.bin let &binary =1
+    autocmd BufReadPost * if &binary | silent %!xxd -g 1
+    autocmd BufReadPost * set ft=xxd | endif
+    autocmd BufWritePre * if &binary | %!xxd -r | endif
+    autocmd BufWritePost * if &binary | silent %!xxd -g 1
+    autocmd BufWritePost * set nomod | endif
 augroup END
 
 "-----------------------------------------------------------------------------
@@ -91,14 +91,15 @@ set noincsearch
 "
 "シンタックスハイライトを有効にする
 if has("syntax")
-	syntax on
+    syntax on
 endif
-"行番号を表示しない
-set nonumber
+"行番号を表示する
+set number
 "タブの左側にカーソル表示
 set listchars=tab:\ \ 
 set list
 "タブ幅を設定する
+set expandtab
 set tabstop=4
 set shiftwidth=4
 "入力中のコマンドをステータスに表示する
@@ -129,3 +130,51 @@ nnoremap k gk
 "フレームサイズを怠惰に変更する
 map <kPlus> <C-W>+
 map <kMinus> <C-W>-
+
+
+"-----------------------------------------------------------------------------
+" プラグインマネージャ
+"
+call plug#begin('~/.vim/plugged')
+    
+    " カラースキーム設定
+    Plug 'Shougo/unite.vim'
+    Plug 'ujihisa/unite-colorscheme'
+     
+    " カラースキーム一覧
+    Plug 'altercation/vim-colors-solarized' " solarized
+    Plug 'croaker/mustang-vim'              " mustang
+    Plug 'jeffreyiacono/vim-colors-wombat'  " wombat
+    Plug 'nanotech/jellybeans.vim'          " jellybeans
+    Plug 'vim-scripts/Lucius'               " lucius
+    Plug 'vim-scripts/Zenburn'              " zenburn
+    Plug 'mrkn/mrkn256.vim'                 " mrkn256
+    Plug 'jpo/vim-railscasts-theme'         " railscasts
+    Plug 'therubymug/vim-pyte'              " pyte
+    Plug 'tomasr/molokai'                   " molokai
+    Plug 'chriskempson/vim-tomorrow-theme'  " tomorrow night
+    Plug 'vim-scripts/twilight'             " twilight
+    Plug 'w0ng/vim-hybrid'                  " hybrid
+    Plug 'freeo/vim-kalisi'                 " kalisi
+    Plug 'morhetz/gruvbox'                  " gruvbox
+    Plug 'toupeira/vim-desertink'           " desertink
+    Plug 'sjl/badwolf'                      " badwolf
+    Plug 'itchyny/landscape.vim'            " landscape
+    Plug 'joshdick/onedark.vim'             " onedark in atom
+    Plug 'gosukiwi/vim-atom-dark'           " atom-dark
+    
+    " コーディング支援
+    Plug 'davidhalter/jedi-vim'             " jedi-vim
+    Plug 'nathanaelkane/vim-indent-guides'  " vim-indent-guides
+    Plug 'itchyny/lightline.vim'            " lightline.vim
+    
+call plug#end()
+
+"-----------------------------------------------------------------------------
+" vim-indent-guides
+"
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
+let g:indent_guides_guide_size = 1
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
